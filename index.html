@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de distribución equitativa</title>
+</head>
+<body>
+  <h1>Calculadora de distribución equitativa</h1>
+  <div>
+    <label for="numCarreras">Número de carreras:</label>
+    <input type="number" id="numCarreras">
+  </div>
+  <div id="personas">
+    <h2>Personas en la oficina:</h2>
+    <input type="text" id="nombre" placeholder="Nombre">
+    <input type="text" id="apellido" placeholder="Apellido">
+    <button onclick="agregarPersona()">Agregar Persona</button>
+    <h3>Seleccionar personas:</h3>
+    <div id="listaPersonas"></div>
+  </div>
+  <button onclick="calcularDistribucion()">Calcular</button>
+  <div id="resultado"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
