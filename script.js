@@ -31,6 +31,13 @@ function mostrarPersonas() {
   });
 }
 
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 function calcularDistribucion() {
   const numCarreras = parseInt(document.getElementById('numCarreras').value);
 
@@ -45,21 +52,32 @@ function calcularDistribucion() {
     personasSeleccionadas.push(personas[index]);
   });
 
-  const personasPorCarrera = Math.ceil(personasSeleccionadas.length / numCarreras);
+  shuffle(personasSeleccionadas);
+
+  const personasPorCarrera = Math.ceil(personasSeleccionadas.length / (numCarreras - 4));
 
   const asignaciones = [];
   for (let i = 0; i < numCarreras; i++) {
     asignaciones.push([]);
   }
 
-  for (let i = 0; i < personasSeleccionadas.length; i++) {
-    const carreraIndex = i % numCarreras;
-    asignaciones[carreraIndex].push(personasSeleccionadas[i]);
+  let indexPersona = 0;
+  for (let i = 0; i < numCarreras; i++) {
+    if (i < 2 || i >= numCarreras - 2) {
+      asignaciones[i] = ['Carrera no asignada'];
+    } else {
+      for (let j = 0; j < personasPorCarrera; j++) {
+        if (indexPersona < personasSeleccionadas.length) {
+          asignaciones[i].push(personasSeleccionadas[indexPersona]);
+          indexPersona++;
+        }
+      }
+    }
   }
 
   const resultado = asignaciones.map((asignacion, index) => {
     return `<h3>Carrera ${index + 1}:</h3>` +
-           `<ul>${asignacion.map(persona => `<li>${persona.nombre} ${persona.apellido}</li>`).join('')}</ul>`;
+           `<ul>${asignacion.map(persona => `<li>${persona.nombre ? persona.nombre + ' ' + persona.apellido : persona}</li>`).join('')}</ul>`;
   }).join('');
 
   document.getElementById('resultado').innerHTML = resultado;
