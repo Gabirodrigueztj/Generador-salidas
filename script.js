@@ -1,5 +1,8 @@
 let personas = [];
 
+// Cargar personas al cargar la página
+window.addEventListener('DOMContentLoaded', cargarPersonas);
+
 function agregarPersona() {
   const nombre = document.getElementById('nombre').value.trim();
   const apellido = document.getElementById('apellido').value.trim();
@@ -9,6 +12,7 @@ function agregarPersona() {
   }
 
   personas.push({ nombre, apellido });
+  guardarPersonas(); // Guardar personas en localStorage
   mostrarPersonas();
   document.getElementById('nombre').value = '';
   document.getElementById('apellido').value = '';
@@ -29,6 +33,18 @@ function mostrarPersonas() {
     listaPersonas.appendChild(label);
     listaPersonas.appendChild(document.createElement('br'));
   });
+}
+
+function guardarPersonas() {
+  localStorage.setItem('personas', JSON.stringify(personas));
+}
+
+function cargarPersonas() {
+  const personasGuardadas = JSON.parse(localStorage.getItem('personas'));
+  if (personasGuardadas) {
+    personas = personasGuardadas;
+    mostrarPersonas();
+  }
 }
 
 function shuffle(array) {
