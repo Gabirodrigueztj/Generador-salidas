@@ -1,0 +1,16 @@
+{
+    "personas": [
+      { "nombre": "Juan", "apellido": "González" },
+      { "nombre": "María", "apellido": "Martínez" },
+      { "nombre": "José", "apellido": "Rodríguez" },
+      { "nombre": "Ana", "apellido": "López" },
+      { "nombre": "Carlos", "apellido": "García" },
+      { "nombre": "Laura", "apellido": "Hernández" },
+      { "nombre": "David", "apellido": "Pérez" },
+      { "nombre": "Sofía", "apellido": "Sánchez" },
+      { "nombre": "Diego", "apellido": "Romero" },
+      { "nombre": "Pipa", "apellido": "Higuain" }
+     
+    ]
+  }
+  

@@ -1,7 +1,8 @@
 let personas = [];
 
 // Cargar personas al cargar la página
-window.addEventListener('DOMContentLoaded', cargarPersonas);
+window.addEventListener('DOMContentLoaded', cargarPersonasDesdeJSON);
+const listaPersonas = document.getElementById('listaPersonas');
 
 function agregarPersona() {
   const nombre = document.getElementById('nombre').value.trim();
@@ -12,14 +13,40 @@ function agregarPersona() {
   }
 
   personas.push({ nombre, apellido });
-  guardarPersonas(); // Guardar personas en localStorage
+  console.log(personas);
   mostrarPersonas();
   document.getElementById('nombre').value = '';
   document.getElementById('apellido').value = '';
+
+  console.log(personas);
+  fetch('http://localhost:3000/agregarPersona', {
+    method: 'POST', // Cambiar a POST
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ nombre, apellido }) // Enviar solo la nueva persona
+  })
+  .then(response => {
+    return response.json();
+  })
+  .then(data =>
+    console.log(data)
+  );
 }
 
-function mostrarPersonas() {
-  const listaPersonas = document.getElementById('listaPersonas');
+// Función para cargar las personas desde personas.json
+function cargarPersonasDesdeJSON() {
+  fetch('personas.json')
+    .then(response => response.json())
+    .then(data => {
+      personas = data.personas;
+      mostrarPersonas(personas);
+    })
+    .catch(error => console.error('Error al cargar personas desde personas.json:', error));
+}
+
+function mostrarPersonas(personas) {
+  console.log(personas);
   listaPersonas.innerHTML = '';
   personas.forEach((persona, index) => {
     const checkbox = document.createElement('input');
@@ -33,25 +60,6 @@ function mostrarPersonas() {
     listaPersonas.appendChild(label);
     listaPersonas.appendChild(document.createElement('br'));
   });
-}
-
-function guardarPersonas() {
-  localStorage.setItem('personas', JSON.stringify(personas));
-}
-
-function cargarPersonas() {
-  const personasGuardadas = JSON.parse(localStorage.getItem('personas'));
-  if (personasGuardadas) {
-    personas = personasGuardadas;
-    mostrarPersonas();
-  }
-}
-
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
 }
 
 function calcularDistribucion() {
@@ -97,4 +105,11 @@ function calcularDistribucion() {
   }).join('');
 
   document.getElementById('resultado').innerHTML = resultado;
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 }
