@@ -15,32 +15,32 @@ function agregarPersona() {
   }
 
   const nuevaPersona = { nombre, apellido }; // Crear objeto de nueva persona
+  const datos = { personas: [nuevaPersona] }; // Crear objeto con la estructura esperada por el servidor
 
-  personas.push(nuevaPersona); // Agregar persona al arreglo local
-  mostrarPersonas(); // Mostrar personas después de agregar una nueva
-  document.getElementById('nombre').value = '';
-  document.getElementById('apellido').value = '';
-
-  // Enviar la nueva persona al servidor para ser guardada en el archivo JSON
+  // Enviar los datos al servidor para agregar la nueva persona al archivo JSON
   fetch('http://localhost:3000/agregarPersona', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(nuevaPersona) // Enviar solo la nueva persona
+    body: JSON.stringify(datos) // Enviar objeto con la estructura correcta
   })
-  .then(response => {
-    return response.json();
-  })
+  .then(response => response.json())
   .then(data => {
     console.log(data);
-    // Aquí podrías realizar alguna acción adicional si lo deseas
+    // Aquí podrías realizar alguna acción adicional si lo deseas, como actualizar la lista de personas en la página
+    mostrarPersonas(); // Por ejemplo, puedes llamar a esta función para actualizar la lista de personas en la página
   })
   .catch(error => {
     console.error('Error al agregar persona:', error);
     // Manejar el error si es necesario
   });
+
+  // Limpiar los campos de entrada después de agregar la persona
+  document.getElementById('nombre').value = '';
+  document.getElementById('apellido').value = '';
 }
+
 
 function cargarPersonasDesdeJSON() {
   fetch('personas.json')
