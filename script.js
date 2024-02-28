@@ -1,8 +1,10 @@
 let personas = [];
-
-// Cargar personas al cargar la página
-window.addEventListener('DOMContentLoaded', cargarPersonasDesdeJSON);
 const listaPersonas = document.getElementById('listaPersonas');
+
+window.addEventListener('DOMContentLoaded', () => {
+  cargarPersonasDesdeJSON();
+  mostrarPersonas(); // Mostrar personas al cargar la página
+});
 
 function agregarPersona() {
   const nombre = document.getElementById('nombre').value.trim();
@@ -12,41 +14,45 @@ function agregarPersona() {
     return;
   }
 
-  personas.push({ nombre, apellido });
-  console.log(personas);
-  mostrarPersonas();
+  const nuevaPersona = { nombre, apellido }; // Crear objeto de nueva persona
+
+  personas.push(nuevaPersona); // Agregar persona al arreglo local
+  mostrarPersonas(); // Mostrar personas después de agregar una nueva
   document.getElementById('nombre').value = '';
   document.getElementById('apellido').value = '';
 
-  console.log(personas);
+  // Enviar la nueva persona al servidor para ser guardada en el archivo JSON
   fetch('http://localhost:3000/agregarPersona', {
-    method: 'POST', // Cambiar a POST
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ nombre, apellido }) // Enviar solo la nueva persona
+    body: JSON.stringify(nuevaPersona) // Enviar solo la nueva persona
   })
   .then(response => {
     return response.json();
   })
-  .then(data =>
-    console.log(data)
-  );
+  .then(data => {
+    console.log(data);
+    // Aquí podrías realizar alguna acción adicional si lo deseas
+  })
+  .catch(error => {
+    console.error('Error al agregar persona:', error);
+    // Manejar el error si es necesario
+  });
 }
 
-// Función para cargar las personas desde personas.json
 function cargarPersonasDesdeJSON() {
   fetch('personas.json')
     .then(response => response.json())
     .then(data => {
       personas = data.personas;
-      mostrarPersonas(personas);
+      mostrarPersonas(); // Mostrar personas después de cargar desde JSON
     })
     .catch(error => console.error('Error al cargar personas desde personas.json:', error));
 }
 
-function mostrarPersonas(personas) {
-  console.log(personas);
+function mostrarPersonas() {
   listaPersonas.innerHTML = '';
   personas.forEach((persona, index) => {
     const checkbox = document.createElement('input');
