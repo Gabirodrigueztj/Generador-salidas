@@ -1,0 +1,17 @@
+
+.persona-nombre {
+  font-family: 'Roboto', sans-serif; 
+  font-size: 25px; 
+  margin-left: 5px;
+}
+
+.logo-titulo {
+  max-width: 400px; 
+  height: auto;
+  margin-bottom: 70px; 
+}
+
+.btn-primary {
+background-color: rgb(121, 192, 0);
+border-color: rgb(121, 192, 0);
+}

@@ -1,4 +1,6 @@
 let personas = [];
+let fechaSeleccionada = '';
+let hipodromoSeleccionado = '';
 const listaPersonas = document.getElementById('listaPersonas');
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -59,16 +61,32 @@ function mostrarPersonas() {
     checkbox.type = 'checkbox';
     checkbox.id = 'persona_' + index;
     checkbox.value = index;
+
     const label = document.createElement('label');
     label.htmlFor = 'persona_' + index;
     label.textContent = `${persona.nombre} ${persona.apellido}`;
-    listaPersonas.appendChild(checkbox);
-    listaPersonas.appendChild(label);
+    label.classList.add('persona-nombre'); // Agrega la clase persona-nombre al label
+
+    const divPersona = document.createElement('div');
+    divPersona.classList.add('persona'); // Agrega la clase persona al div contenedor
+    divPersona.appendChild(checkbox);
+    divPersona.appendChild(label);
+
+    listaPersonas.appendChild(divPersona); // Agrega el div contenedor al contenedor principal de personas
     listaPersonas.appendChild(document.createElement('br'));
   });
 }
 
+
+
+// Función para obtener el hipódromo seleccionado
+function obtenerHipodromoSeleccionado() {
+  hipodromoSeleccionado = document.getElementById('hipodromo').value;
+}
+
 function calcularDistribucion() {
+  obtenerFechaSeleccionada(); // Obtener la fecha seleccionada
+  obtenerHipodromoSeleccionado(); // Obtener el hipódromo seleccionado antes de calcular la distribución
   const numCarreras = parseInt(document.getElementById('numCarreras').value);
 
   if (isNaN(numCarreras)) {
@@ -105,10 +123,14 @@ function calcularDistribucion() {
     }
   }
 
-  const resultado = asignaciones.map((asignacion, index) => {
-    return `<h3>Carrera ${index + 1}:</h3>` +
-           `<ul>${asignacion.map(persona => `<li>${persona.nombre ? persona.nombre + ' ' + persona.apellido : persona}</li>`).join('')}</ul>`;
-  }).join('');
+    // Agregar el hipódromo seleccionado como título del día en el resultado
+    const resultado = `<h2 class="text-center mt-4">${hipodromoSeleccionado} - ${fechaSeleccionada}</h2>` + 
+    asignaciones.map((asignacion, index) => {
+      return `<h3>Carrera ${index + 1}:</h3>` +
+             `<ul>${asignacion.map(persona => `<li>${persona.nombre ? persona.nombre + ' ' + persona.apellido : persona}</li>`).join('')}</ul>`;
+    }).join('');
+
+
 
   document.getElementById('resultado').innerHTML = resultado;
 }
@@ -118,4 +140,25 @@ function shuffle(array) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
+}
+
+function seleccionarTodos() {
+  document.querySelectorAll('#listaPersonas input[type="checkbox"]').forEach(checkbox => {
+      checkbox.checked = true;
+  });
+}
+
+function deseleccionarTodos() {
+  document.querySelectorAll('#listaPersonas input[type="checkbox"]').forEach(checkbox => {
+      checkbox.checked = false;
+  });
+}
+
+
+// Agregar una variable global para almacenar la fecha seleccionada
+
+
+// Función para obtener la fecha seleccionada
+function obtenerFechaSeleccionada() {
+  fechaSeleccionada = document.getElementById('fecha').value;
 }
